@@ -419,7 +419,7 @@ static char *yy_last_accepting_cpos;
 char *yytext;
 #line 1 "1907031.l"
 #define INITIAL 0
-#line 21 "1907031.l"
+#line 19 "1907031.l"
 	#include "1907031.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -582,7 +582,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 34 "1907031.l"
+#line 32 "1907031.l"
 
 
 #line 589 "lex.yy.c"
@@ -670,77 +670,77 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 36 "1907031.l"
+#line 34 "1907031.l"
 { printf("Single Line Comment\n"); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 37 "1907031.l"
+#line 35 "1907031.l"
 { printf("Multiple Line Comment\n"); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 39 "1907031.l"
+#line 37 "1907031.l"
 { return INT; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 40 "1907031.l"
+#line 38 "1907031.l"
 { return FLOAT; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 41 "1907031.l"
+#line 39 "1907031.l"
 { return STRING; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 43 "1907031.l"
+#line 41 "1907031.l"
 { return '('; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 44 "1907031.l"
+#line 42 "1907031.l"
 { return ')'; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 45 "1907031.l"
+#line 43 "1907031.l"
 { return '<'; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 46 "1907031.l"
+#line 44 "1907031.l"
 { return '>'; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 47 "1907031.l"
+#line 45 "1907031.l"
 { return '{'; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 48 "1907031.l"
+#line 46 "1907031.l"
 { return '}'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 49 "1907031.l"
+#line 47 "1907031.l"
 { return END; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 50 "1907031.l"
+#line 48 "1907031.l"
 { return ','; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 51 "1907031.l"
+#line 49 "1907031.l"
 { return '='; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 53 "1907031.l"
+#line 51 "1907031.l"
 {
 	yylval.num = atoi(yytext);
 	return NUMBER;
@@ -748,7 +748,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 57 "1907031.l"
+#line 55 "1907031.l"
 {
 	yylval.num = atof(yytext);
 	return NUMBER;
@@ -756,7 +756,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 62 "1907031.l"
+#line 60 "1907031.l"
 { 
 	yylval.string = strdup(yytext);
 	return VARIABLE; 
@@ -764,32 +764,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 67 "1907031.l"
+#line 65 "1907031.l"
 { return MAIN; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 68 "1907031.l"
+#line 66 "1907031.l"
 { return IMPORT; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 69 "1907031.l"
+#line 67 "1907031.l"
 { return HEADER; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 71 "1907031.l"
+#line 69 "1907031.l"
 
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 73 "1907031.l"
+#line 71 "1907031.l"
 {yyerror("Unknown Character.\n");}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 75 "1907031.l"
+#line 73 "1907031.l"
 ECHO;
 	YY_BREAK
 #line 796 "lex.yy.c"
@@ -1678,4 +1678,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 75 "1907031.l"
+#line 73 "1907031.l"

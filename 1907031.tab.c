@@ -512,9 +512,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   101,   101,   102,   106,   107,   110,   112,   113,   116,
-     117,   120,   121,   122,   123,   134,   138,   139,   140,   144,
-     152,   161,   167,   179,   183
+       0,   101,   101,   102,   106,   107,   111,   114,   115,   119,
+     120,   124,   125,   126,   127,   138,   142,   143,   144,   148,
+     156,   165,   171,   183,   186
 };
 #endif
 
@@ -1442,21 +1442,21 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 110 "1907031.y"
+#line 111 "1907031.y"
     {printf("\nMain Function Declared!\n");;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 112 "1907031.y"
+#line 114 "1907031.y"
     { printf("\nHeader File Found!\n"); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 123 "1907031.y"
+#line 127 "1907031.y"
     {
 		if(chkDeclared((yyvsp[(1) - (4)].string)) == 0) {
 			printf("\n%s Not Declared!\n", (yyvsp[(1) - (4)].string));
@@ -1470,35 +1470,35 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 134 "1907031.y"
+#line 138 "1907031.y"
     { printf("\nValid Syntax!\n"); ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 138 "1907031.y"
+#line 142 "1907031.y"
     { ttp = 0;;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 139 "1907031.y"
+#line 143 "1907031.y"
     { ttp = 1;;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 140 "1907031.y"
+#line 144 "1907031.y"
     { ttp = 2;;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 144 "1907031.y"
+#line 148 "1907031.y"
     {
         if(chkDeclared((yyvsp[(3) - (3)].string))==1) {
             printf("\nDuplicate Declaration!\n");
@@ -1512,7 +1512,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 152 "1907031.y"
+#line 156 "1907031.y"
     {
         if(chkDeclared((yyvsp[(3) - (5)].string))==1) {
             printf("\nDuplicate Declaration!\n");
@@ -1527,7 +1527,7 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 161 "1907031.y"
+#line 165 "1907031.y"
     {
         if(chkDeclared((yyvsp[(1) - (1)].string))==1)
             printf("\nDuplicate Declaration!\n");
@@ -1539,7 +1539,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 167 "1907031.y"
+#line 171 "1907031.y"
     {
         if(chkDeclared((yyvsp[(1) - (3)].string))==1) {
             printf("\nDuplicate Declaration!\n");
@@ -1554,7 +1554,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 179 "1907031.y"
+#line 183 "1907031.y"
     {
 		(yyval.num) = (yyvsp[(1) - (1)].num);
 	;}
@@ -1563,7 +1563,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 183 "1907031.y"
+#line 186 "1907031.y"
     {
         if(chkDeclared((yyvsp[(1) - (1)].string)) == 0) {
             (yyval.num)=0;
@@ -1791,7 +1791,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 195 "1907031.y"
+#line 198 "1907031.y"
 
 
 int yywrap()

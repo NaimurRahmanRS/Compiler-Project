@@ -10,8 +10,6 @@ Unary_operator "#++"|"#--"|"!#"
 Relation_operator "less"|"great"|"eqeq"|"great_eq"|"less_eq"|"noteq"
 Assignment_operator "="|"+="|"-="|"/="|"*="
 integer (-|+)?[0-9]+
-float [+-]?[0-9]+[.][0-9]+|[+-]?[0-9]+[.][0-9]|[1-9]+e[-+][0-9]+
-double [+-]?[0-9]+[.][0-9]+{6,12}|[+-]?[.][0-9]+|[1-9]+e[+-][0-9]+{6,12}
 char [A-Za-z]+
 Identifiers [a-zA-Z][a-zA-Z0-9]*
 S_comment \/\/[^\n]*

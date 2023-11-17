@@ -107,17 +107,21 @@ program:
     | /* NULL */
     ;
 
-main: MAIN {printf("\nMain Function Declared!\n");}
+main:
+    MAIN {printf("\nMain Function Declared!\n");}
 
-import: IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
+import:
+    IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
     | /* NULL */
     ;
 
-statements:  statements cstatement
+statements:
+    statements cstatement
 	| /* NULL */
 	;
 
-cstatement: END
+cstatement:
+    END
 	| declare
 	| expression END
     | VARIABLE '=' expression END {
@@ -130,18 +134,18 @@ cstatement: END
 	}
     ;
 
-declare	:
-	type id END { printf("\nValid Syntax!\n"); } 
+declare:
+    type id END { printf("\nValid Syntax!\n"); } 
 	;
 
-type	:
-	INT { ttp = 0;}
+type:
+    INT { ttp = 0;}
 	| FLOAT  { ttp = 1;}
 	| STRING  { ttp = 2;}
 	;
 
-id	:
-	id ',' VARIABLE {
+id:
+    id ',' VARIABLE {
         if(chkDeclared($3)==1) {
             printf("\nDuplicate Declaration!\n");
         }
@@ -176,10 +180,9 @@ id	:
     ;
 
 expression:
-	NUMBER {
+    NUMBER {
 		$$ = $1;
 	}
-
 	| VARIABLE {
         if(chkDeclared($1) == 0) {
             $$=0;
