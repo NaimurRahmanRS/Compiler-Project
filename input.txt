@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main() {
+	int a = 6;
+	int b = a;
+	int c = 7, d = 5;
+	float x;
+	string y;
+	c = 3;
+	b = 8;
+}
