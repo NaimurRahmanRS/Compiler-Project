@@ -75,7 +75,13 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "factorial"	{ return FACTORIAL; }
 "max" { return MAX; }
 "min" { return MIN; }
-"isPrime"	{ return PRIME; }
+"isPrime" { return PRIME; }
+
+"print" { return DISPLAY; }
+
+"if" { return IF; }
+"else_if" { return ELSE_IF; }
+"else" { return ELSE; }
 
 "-"?{digits}+ {
 	yylval.num = atoi(yytext);

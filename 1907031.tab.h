@@ -68,7 +68,11 @@
      MAX = 284,
      MIN = 285,
      PRIME = 286,
-     DEF = 287
+     DEF = 287,
+     DISPLAY = 288,
+     IF = 289,
+     ELSE_IF = 290,
+     ELSE = 291
    };
 #endif
 
@@ -79,7 +83,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 100 "1907031.y"
+#line 104 "1907031.y"
 
     int num;
     float flt;
@@ -88,7 +92,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 92 "1907031.tab.h"
+#line 96 "1907031.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

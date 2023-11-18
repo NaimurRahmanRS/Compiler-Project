@@ -39,4 +39,14 @@ int main() {
 	a = min(b,c);
 	isPrime(b);
 	Abc(b,c);
+	print(a);
+	if(a equal b) {
+		print(a);
+	}
+	else_if(a equal c) {
+		print(a);
+	}
+	else {
+		print(a);
+	}
 }

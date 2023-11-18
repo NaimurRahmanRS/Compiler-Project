@@ -16,6 +16,10 @@ float store_float[1000];
 int type[1000];
 int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 
+// Conditional Statement Variables
+int ifptr = 0;
+int ifdone[1000];
+
 // Variable Counter
 int var_cnt = 0;
 
@@ -112,7 +116,8 @@ int getValue(char *s){
 %token INC DEC NOT
 %token SIN COS LOG TAN LN
 %token ODDEVEN FACTORIAL MAX MIN PRIME
-%token DEF
+%token DEF DISPLAY
+%token IF ELSE_IF ELSE
 
 %left LT GT GEQ LEQ EQ NEQ
 %left '+' '-'
@@ -189,7 +194,58 @@ cstatement:
 		}
 	}
     | function_call END
+    | DISPLAY '(' VARIABLE ')' END {
+		if(chkDeclared($3)==0) {
+			printf("\nCan't print, Variable is not declared\n");
+        }
+        else {
+            printf("\nPrinting Value of the variable %s: %d\n", $3, store[getValue($3)]);
+        }
+	}
+    | if_condition '{' statements '}' {
+		printf("\nIf Block is Successfully Handled\n");
+	}
+	| else_if_condition '{' statements '}' {
+		printf("\nElse If Block is Successfully Handled\n");
+	}
+	| else_condition '{' statements '}' {
+		printf("\nElse Block is Successfully Handled\n");
+	}
     ;
+
+if_condition:
+    IF '(' expression ')' {
+        if( $3 == 1 ) {
+			ifdone[ifptr] = 1;
+			printf("\nIf Block is Executed\n");
+		}
+        else {
+            printf("\nIf Block is Not Executed\n");
+        }
+        ifptr++;
+    }
+
+else_if_condition:
+    ELSE_IF '(' expression ')' {
+        if( $3 == 1 && ifdone[ifptr] == 0) {
+			ifdone[ifptr] = 1;
+			printf("\nElse If Block is Executed\n");
+		}
+        else {
+            printf("\nElse If Block is Not Executed\n");
+        }
+    }
+
+else_condition:
+    ELSE {
+        if( ifdone[ifptr] == 0) {
+			ifdone[ifptr] = 1;
+			printf("\nElse Block is Executed \n");
+		}
+        else {
+            printf("\nElse Block is Not Executed\n");
+        }
+    }
 
 function_call: 
     f_var '(' call_param ')' { 
