@@ -43,11 +43,18 @@
      INT = 259,
      FLOAT = 260,
      STRING = 261,
-     VARIABLE = 262,
-     NUMBER = 263,
-     IMPORT = 264,
-     HEADER = 265,
-     MAIN = 266
+     MOD = 262,
+     LT = 263,
+     GT = 264,
+     GEQ = 265,
+     LEQ = 266,
+     EQ = 267,
+     NEQ = 268,
+     VARIABLE = 269,
+     NUMBER = 270,
+     IMPORT = 271,
+     HEADER = 272,
+     MAIN = 273
    };
 #endif
 
@@ -67,7 +74,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 71 "1907031.tab.h"
+#line 78 "1907031.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

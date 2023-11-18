@@ -48,10 +48,25 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "," { return ','; }
 "="	{ return '='; }
 
+"+"	{ return '+'; }
+"-"	{ return '-'; }
+"*"	{ return '*'; }
+"/"	{ return '/'; }
+"^"	{ return '^'; }
+"mod"	{ return MOD; }
+
+"less"	{ return LT; }
+"great"	{ return GT; }
+"equal"	{ return EQ; }
+"great_eq"	{ return GEQ; }
+"less_eq"	{ return LEQ; }
+"not_eq"	{ return NEQ; }
+
 "-"?{digits}+ {
 	yylval.num = atoi(yytext);
 	return NUMBER;
 }
+
 "-"?({digits}+)?"."{digits}+ {
 	yylval.num = atof(yytext);
 	return NUMBER;

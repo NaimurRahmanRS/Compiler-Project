@@ -8,4 +8,17 @@ int main() {
 	string y;
 	c = 3;
 	b = 8;
+	a = b + c;
+	a = b - c;
+	a = b mod c;
+	a = b*c;
+	a = b/c;
+	a = b^c;
+	a = b+b/c+c;
+	a = b great c;
+	a = b less c;
+	a = b equal c;
+	a = b not_eq c;
+	a = b less_eq c;
+	a = b great_eq c;
 }

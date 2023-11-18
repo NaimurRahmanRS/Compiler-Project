@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 extern FILE *yyin;
-extern FILE *yyout;
+//extern FILE *yyout;
 int lineNo = 0;
 int yylex();
 int yyerror(char *s);
@@ -90,11 +90,17 @@ int getValue(char *s){
     char* string;
 };
 
-%token END INT FLOAT STRING
+%token END INT FLOAT STRING MOD
+%token LT GT GEQ LEQ EQ NEQ
 %token <string> VARIABLE
 %token <num> NUMBER
 %type <num> expression
 %token IMPORT HEADER MAIN
+
+%left LT GT GEQ LEQ EQ NEQ
+%left '+' '-'
+%left '*' '/' MOD
+%left '^'
 
 %%
 
@@ -103,12 +109,12 @@ start:
     ;
 
 program:
-    import main '(' ')' '{' statements '}'  {printf("\nProgram successfully ended\n");}
+    import main '(' ')' '{' statements '}' { printf("\nProgram successfully ended\n"); }
     | /* NULL */
     ;
 
 main:
-    MAIN {printf("\nMain Function Declared!\n");}
+    MAIN { printf("\nMain Function Declared!\n"); }
 
 import:
     IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
@@ -139,9 +145,9 @@ declare:
 	;
 
 type:
-    INT { ttp = 0;}
-	| FLOAT  { ttp = 1;}
-	| STRING  { ttp = 2;}
+    INT { ttp = 0; }
+	| FLOAT  { ttp = 1; }
+	| STRING  { ttp = 2; }
 	;
 
 id:
@@ -180,9 +186,7 @@ id:
     ;
 
 expression:
-    NUMBER {
-		$$ = $1;
-	}
+    NUMBER { $$ = $1; }
 	| VARIABLE {
         if(chkDeclared($1) == 0) {
             $$=0;
@@ -193,6 +197,61 @@ expression:
             $$ = store[index];
         }
     }
+    | expression '+' expression { 	
+        $$ = $1 + $3; 
+        printf("\nAdd Value %d\n", $$);
+    }
+	| expression '-' expression {
+        $$ = $1 - $3; 
+        printf("\nSub Value %d\n", $$);
+	}
+	| expression '*' expression {
+        $$ = $1 * $3;
+        printf("\nMul Value %d\n", $$);
+	}
+	| expression '/' expression { 	
+        if($3) {
+                $$ = $1 / $3;
+                printf("\nDiv Value %d\n", $$);
+        }
+        else {
+                $$ = 0;
+                printf("\nDiv by Zero\t");
+        }
+	}
+	| expression '^' expression { 	
+        $$=pow($1, $3); 
+        printf("\nPower Value %d\n", $$);
+	}
+	| expression MOD expression {	 
+        $$=$1 % $3; 
+        printf("\nRemainder Value %d\n", $$);
+	}
+	| '(' expression ')' { $$ = $2; }
+    | expression LT expression {
+        $$ = $1 < $3;
+        printf("\nLess Than Value is %d\n", $$);
+	}
+	| expression GT expression {
+        $$ = $1 > $3; 
+        printf("\nGreater Than Value is %d\n", $$);
+	}
+	| expression LEQ expression { 
+        $$ = $1 <= $3;
+        printf("\nLess Than or Equal To Value is %d\n",$$); 
+	}
+	| expression GEQ expression { 
+        $$ = $1 >= $3; 
+        printf("\nGreater Than or Equal To Value is %d\n",$$);
+	}	
+	| expression EQ expression { 
+        $$ = $1 == $3; 
+        printf("\nEqual To Value is %d\n",$$);
+	}
+	| expression NEQ expression { 
+        $$ = $1 != $3; 
+        printf("\nNot Eqaul To Value is %d\n",$$);
+	}
     ;
 
 %%
