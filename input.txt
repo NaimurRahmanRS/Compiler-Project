@@ -21,4 +21,17 @@ int main() {
 	a = b not_eq c;
 	a = b less_eq c;
 	a = b great_eq c;
+	a++;
+	a--;
+	!a;
+	sin(b);
+	cos(b);
+	tan(b);
+	log(b);
+	ln(b);
+	isOddEven(b);
+	a = factorial(b);
+	a = max(b,c);
+	a = min(b,c);
+	isPrime(b);
 }

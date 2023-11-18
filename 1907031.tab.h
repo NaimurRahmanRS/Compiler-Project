@@ -54,7 +54,20 @@
      NUMBER = 270,
      IMPORT = 271,
      HEADER = 272,
-     MAIN = 273
+     MAIN = 273,
+     INC = 274,
+     DEC = 275,
+     NOT = 276,
+     SIN = 277,
+     COS = 278,
+     LOG = 279,
+     TAN = 280,
+     LN = 281,
+     ODDEVEN = 282,
+     FACTORIAL = 283,
+     MAX = 284,
+     MIN = 285,
+     PRIME = 286
    };
 #endif
 
@@ -74,7 +87,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 78 "1907031.tab.h"
+#line 91 "1907031.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

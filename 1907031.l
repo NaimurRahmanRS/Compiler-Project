@@ -53,14 +53,29 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "*"	{ return '*'; }
 "/"	{ return '/'; }
 "^"	{ return '^'; }
-"mod"	{ return MOD; }
+"mod" { return MOD; }
 
-"less"	{ return LT; }
+"less" { return LT; }
 "great"	{ return GT; }
 "equal"	{ return EQ; }
-"great_eq"	{ return GEQ; }
-"less_eq"	{ return LEQ; }
-"not_eq"	{ return NEQ; }
+"great_eq" { return GEQ; }
+"less_eq" { return LEQ; }
+"not_eq" { return NEQ; }
+
+"++" { return INC; }
+"--" { return DEC; }
+"!"	{ return NOT; }
+
+"sin" { return SIN; }
+"cos" { return COS; }
+"tan" { return TAN; }
+"ln" { return LN; }
+"log" { return LOG; }
+"isOddEven" { return ODDEVEN; }
+"factorial"	{ return FACTORIAL; }
+"max" { return MAX; }
+"min" { return MIN; }
+"isPrime"	{ return PRIME; }
 
 "-"?{digits}+ {
 	yylval.num = atoi(yytext);

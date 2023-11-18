@@ -96,6 +96,9 @@ int getValue(char *s){
 %token <num> NUMBER
 %type <num> expression
 %token IMPORT HEADER MAIN
+%token INC DEC NOT
+%token SIN COS LOG TAN LN
+%token ODDEVEN FACTORIAL MAX MIN PRIME
 
 %left LT GT GEQ LEQ EQ NEQ
 %left '+' '-'
@@ -238,20 +241,137 @@ expression:
 	}
 	| expression LEQ expression { 
         $$ = $1 <= $3;
-        printf("\nLess Than or Equal To Value is %d\n",$$); 
+        printf("\nLess Than or Equal To Value is %d\n", $$); 
 	}
 	| expression GEQ expression { 
         $$ = $1 >= $3; 
-        printf("\nGreater Than or Equal To Value is %d\n",$$);
+        printf("\nGreater Than or Equal To Value is %d\n", $$);
 	}	
 	| expression EQ expression { 
         $$ = $1 == $3; 
-        printf("\nEqual To Value is %d\n",$$);
+        printf("\nEqual To Value is %d\n", $$);
 	}
 	| expression NEQ expression { 
         $$ = $1 != $3; 
-        printf("\nNot Eqaul To Value is %d\n",$$);
+        printf("\nNot Eqaul To Value is %d\n", $$);
 	}
+    | VARIABLE INC {
+        if( chkDeclared($1) == 0) {
+            $$=0;
+            printf("\n%s Not Declared!\n", $1);
+        }
+        else {
+            int tmp = store[getValue($1)];
+            tmp = tmp+1;
+            store[getValue($1)] = tmp;
+            $$=store[getValue($1)];
+            printf("\nValue After Increment is %d\n", $$);
+        }
+    }
+	| VARIABLE DEC {
+  		if( chkDeclared($1) == 0) {
+    		$$=0;
+     		printf("\n%s Not Declared!\n", $1);
+   		}
+    	else {
+            int tmp = store[getValue($1)];
+            tmp = tmp-1;
+            store[getValue($1)] = tmp;
+            $$=store[getValue($1)];
+            printf("\nValue After Decrement is %d\n", $$);
+        }
+	}
+	| NOT VARIABLE {
+  		if( chkDeclared($2) == 0) {
+            $$=0;
+            printf("\n%s Not Declared!\n", $2);
+   		}
+        else {
+            int tmp = store[getValue($2)];
+            tmp = !tmp;
+            store[getValue($2)] = tmp;
+            $$=store[getValue($2)];
+           printf("\nValue After NOT Operation is %d\n", $$);
+        }
+	}
+    | SIN '(' expression ')' {
+		printf("\nValue of Sin(%d) is %lf\n", $3, sin($3*3.1416/180)); 
+        $$ = sin($3*3.1416/180);
+	}
+	| COS '(' expression ')' {
+		printf("\nValue of Cos(%d) is %lf\n", $3, cos($3*3.1416/180)); 
+        $$ = cos($3*3.1416/180);
+	}
+	| TAN '(' expression ')' {
+		printf("\nValue of Tan(%d) is %lf\n", $3, tan($3*3.1416/180)); 
+        $$ = tan($3*3.1416/180);
+	}
+	| LOG '(' expression ')' {
+		printf("\nValue of Log(%d) is %lf\n", $3, (log($3*1.0)/log(10.0))); 
+        $$ = (log($3*1.0)/log(10.0));
+	}
+	| LN '(' expression ')'	{
+		printf("\nValue of Ln(%d) is %lf\n", $3, (log($3))); 
+        $$=(log($3));
+	}
+    | ODDEVEN '(' expression ')' {
+        if($3%2==0) {
+            $$ = 0;
+            printf("\n%d is An Even Number\n", $3);
+        } 
+        else {
+            $$ = 1;
+            printf("\n%d is An Odd Number\n", $3);
+        }        
+    }
+	| FACTORIAL '(' expression ')' {
+        int ans = 1;
+        int i;
+        for(i=1; i<=$3; i++) {
+            ans = ans*i;
+        }
+        printf("\nFactorial of %d is %d\n", $3, ans);
+        $$ = ans;
+    }
+	| MAX '(' expression ',' expression ')' {
+        if( $3 < $5 ) {
+            $$ = $5;
+            printf("\nMax Number Between %d and %d is %d\n", $3, $5, $5);
+        }
+        else {
+            $$ = $3;
+            printf("\nMax Number Between %d and %d is %d\n", $3, $5, $3);
+        }
+    }
+	| MIN '(' expression ',' expression ')' {
+        if( $3 < $5 ) {
+            $$ = $3;
+            printf("\nMin Number Between %d and %d is %d\n", $3, $5, $3);
+        }
+        else {
+            $$ = $5;
+            printf("\nMin Number Between %d and %d is %d\n", $3, $5, $5);
+        }
+    }
+	| PRIME '(' expression ')' {
+        int x = $3;
+        int ck = 0;
+        int i; 
+        for(i=2; i*i<=x; i++) {
+            if( x%i == 0 ) {
+                ck = 1;
+                break;
+            }
+        }
+        if(ck) {
+            $$ = 0;
+            printf("\n%d is Not A Prime Number\n", x);
+        }
+        else {
+            $$ = 1;
+            printf("\n%d is A Prime Number\n", x);
+        }
+    }
     ;
 
 %%
