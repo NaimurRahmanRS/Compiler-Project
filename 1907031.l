@@ -87,14 +87,16 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 	return NUMBER;
 }
 
+{Datatype}[ ]+"main" { return MAIN; }
+"#include" { return IMPORT; }
+{Identifiers}".h" { return HEADER; }
+
+"function" { return DEF; }
+
 {Identifiers} { 
 	yylval.string = strdup(yytext);
 	return VARIABLE; 
 }
-
-{Datatype}[ ]+"main" { return MAIN; }
-"#include" { return IMPORT; }
-{Identifiers}".h" { return HEADER; }
 
 [ \t\n]*
 

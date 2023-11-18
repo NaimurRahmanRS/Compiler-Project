@@ -14,7 +14,7 @@ char var_name[1000][1000];
 int store[1000];
 float store_float[1000];
 int type[1000];
-int ttp = 0; // 0 = int, 1 = float, 2 = string
+int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 
 // Variable Counter
 int var_cnt = 0;
@@ -48,6 +48,19 @@ int init_asn(char *s){
         strcpy(name, "String");
     }
     printf("\nNew Variable Declared With Name: %s and Type: %s\n", var_name[var_cnt], name);
+    var_cnt++;
+    return 1;
+}
+
+// New Function Declaration
+int init_asn_func(char *s){
+    if(chkDeclared(s) == 1){
+        return 0;
+    }
+    strcpy(var_name[var_cnt], s);
+    store[var_cnt] = 0;
+    type[var_cnt] = 3;
+    printf("\nNew Function Declared With Name: %s\n", var_name[var_cnt]);
     var_cnt++;
     return 1;
 }
@@ -99,6 +112,7 @@ int getValue(char *s){
 %token INC DEC NOT
 %token SIN COS LOG TAN LN
 %token ODDEVEN FACTORIAL MAX MIN PRIME
+%token DEF
 
 %left LT GT GEQ LEQ EQ NEQ
 %left '+' '-'
@@ -107,12 +121,12 @@ int getValue(char *s){
 
 %%
 
-start: 
+start: /* NULL */
     | start program
     ;
 
 program:
-    import main '(' ')' '{' statements '}' { printf("\nProgram successfully ended\n"); }
+    import func main '(' ')' '{' statements '}' { printf("\nProgram successfully ended\n"); }
     | /* NULL */
     ;
 
@@ -123,6 +137,39 @@ import:
     IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
     | /* NULL */
     ;
+
+func: 
+    func_head '(' param ')' '{' statements '}' {
+		printf("\nUser Defined Function Ended!\n");
+	}
+	| /* NULL */
+	;
+
+func_head: 
+    DEF VARIABLE {
+        if(chkDeclared($2)==1) {
+            printf("\nDuplicate Function Name!\n");
+        }
+        else {
+            init_asn_func($2);
+        }
+    }
+
+param:
+	param ',' type pid	{ printf("\nValid Function Parameter Declaration!\n"); } 
+	| type pid 	{ printf("\nValid Function Parameter Declaration!\n"); } 
+	;
+
+pid	:
+	 VARIABLE {
+		if(chkDeclared($1)==1) {
+      		printf("\nDuplicate Declaration!\n");
+        }
+   		else {
+      	    init_asn($1);
+		}
+    }
+	;
 
 statements:
     statements cstatement
@@ -141,6 +188,45 @@ cstatement:
 			setValue($1, $3);
 		}
 	}
+    | function_call END
+    ;
+
+function_call: 
+    f_var '(' call_param ')' { 
+        printf("\nValid Function Call!\n");
+    }
+    ;
+
+f_var: 
+    VARIABLE {
+        if(chkDeclared($1) == 0) {
+			printf("\n%s Function is Not Declared!\n", $1);
+		}
+        else {
+            printf("\n%s Function is Called!\n", $1);
+        }
+    }
+
+call_param:
+    call_param ',' VARIABLE {
+        if(chkDeclared($3) == 0) {
+            printf("\n%s Variable is Not Declared\n", $3);
+        }
+        else {
+            printf("\n%s Passed as Parameter For Function!\n", $3); 
+                
+        }
+    }
+    | VARIABLE {
+        if(chkDeclared($1) == 0) {
+            printf("\n%s Variable is Not Declared\n", $1);
+        }
+        else {
+            printf("\n%s Passed as Parameter For Function!\n", $1); 
+                
+        }
+    }
+	| /* NULL */
     ;
 
 declare:

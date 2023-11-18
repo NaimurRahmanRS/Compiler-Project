@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+function Abc (int i, int j) {
+	i = 5;
+}
+
 int main() {
 	int a = 6;
 	int b = a;
@@ -34,4 +38,5 @@ int main() {
 	a = max(b,c);
 	a = min(b,c);
 	isPrime(b);
+	Abc(b,c);
 }
