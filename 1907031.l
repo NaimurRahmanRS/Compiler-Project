@@ -47,6 +47,7 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 ";" { return END; }
 "," { return ','; }
 "="	{ return '='; }
+":" { return ':'; }
 
 "+"	{ return '+'; }
 "-"	{ return '-'; }
@@ -86,6 +87,11 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "for" { return FOR; }
 "inc" { return FLINC; }
 "dec" { return FLDEC; }
+"while" { return WHILE; }
+
+"case" { return CASE; }
+"switch" { return SWITCH; }
+"default" { return DEFAULT; }
 
 "-"?{digits}+ {
 	yylval.num = atoi(yytext);

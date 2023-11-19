@@ -20,6 +20,10 @@ int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 int ifptr = 0;
 int ifdone[1000];
 
+// Switch Handling Variables
+int switch_var = 0; 
+int switch_case = 0;
+
 // Variable Counter
 int var_cnt = 0;
 
@@ -118,7 +122,8 @@ int getValue(char *s){
 %token ODDEVEN FACTORIAL MAX MIN PRIME
 %token DEF DISPLAY
 %token IF ELSE_IF ELSE
-%token FOR FLINC FLDEC
+%token FOR FLINC FLDEC WHILE
+%token CASE SWITCH DEFAULT
 
 %left LT GT GEQ LEQ EQ NEQ
 %left '+' '-'
@@ -128,7 +133,7 @@ int getValue(char *s){
 %%
 
 program:
-    import func main '(' ')' '{' statements '}' { printf("\nProgram successfully ended\n"); }
+    import func main '(' ')' '{' statements '}' { printf("\nProgram Successfully Ended!\n"); }
     | /* NULL */
     ;
 
@@ -199,18 +204,70 @@ cstatement:
         }
 	}
     | if_condition '{' statements '}' {
-		printf("\nIf Block is Successfully Handled\n");
+		printf("\nIf Block is Successfully Handled!\n");
 	}
 	| else_if_condition '{' statements '}' {
-		printf("\nElse If Block is Successfully Handled\n");
+		printf("\nElse If Block is Successfully Handled!\n");
 	}
 	| else_condition '{' statements '}' {
-		printf("\nElse Block is Successfully Handled\n");
+		printf("\nElse Block is Successfully Handled!\n");
 	}
     | for_start '(' for_loop ')' '{' statements '}' {
         printf("\nFor Loop Execution Finshed!\n");
     }
+    | while_start '(' while_loop ')' '{' statements '}' {
+        printf("\nWhile Loop Execution Finshed!\n");
+    }
+    | switch_start '(' switch_exp ')' '{' switch_statement '}' {
+        printf("\nSwitch Execution Finshed!\n");
+    }
     ;
+
+switch_start:
+    SWITCH {
+        printf("\nSwitch Case Started!\n");
+    }
+    ;
+
+switch_exp :
+	expression {
+        switch_case = 0;
+        switch_var = $1;
+    }
+	;
+
+switch_statement: /* NULL */
+	| switch_statement CASE expression ':' '{' statements '}' {
+        if($3 == switch_var && switch_case == 0 ) {
+            printf("\nSwitch Case Executed is %d!\n", $3);
+            switch_case = 1;
+        }
+        else {
+            printf("\nSwitch Case No: %d is Ignored!\n", $3);
+        }
+    }
+	| switch_statement DEFAULT ':' '{' statements '}' {
+        if(switch_case == 0) {
+            switch_case = 1;
+            printf("\nSwitch Default Case is Executed!\n");
+        }
+    }
+	;
+
+while_loop:
+    VARIABLE loop_exp loop_assign {
+        if(chkDeclared($1) == 0) {
+            printf("\n%s Not Declared!\n", $1);
+        }
+        else {
+            printf("\nWhile Loop Variable Declaration is Correct!\n");	
+        } 
+    }
+
+while_start:
+    WHILE {
+        printf("\nWhile Loop Started!\n");
+    }
 
 for_start:
     FOR {
@@ -266,10 +323,10 @@ if_condition:
     IF '(' expression ')' {
         if( $3 == 1 ) {
 			ifdone[ifptr] = 1;
-			printf("\nIf Block is Executed\n");
+			printf("\nIf Block is Executed!\n");
 		}
         else {
-            printf("\nIf Block is Not Executed\n");
+            printf("\nIf Block is Not Executed!\n");
         }
         ifptr++;
     }
@@ -278,10 +335,10 @@ else_if_condition:
     ELSE_IF '(' expression ')' {
         if( $3 == 1 && ifdone[ifptr] == 0) {
 			ifdone[ifptr] = 1;
-			printf("\nElse If Block is Executed\n");
+			printf("\nElse If Block is Executed!\n");
 		}
         else {
-            printf("\nElse If Block is Not Executed\n");
+            printf("\nElse If Block is Not Executed!\n");
         }
     }
 
@@ -289,10 +346,10 @@ else_condition:
     ELSE {
         if( ifdone[ifptr] == 0) {
 			ifdone[ifptr] = 1;
-			printf("\nElse Block is Executed \n");
+			printf("\nElse Block is Executed!\n");
 		}
         else {
-            printf("\nElse Block is Not Executed\n");
+            printf("\nElse Block is Not Executed!\n");
         }
     }
 
@@ -393,58 +450,58 @@ expression:
     }
     | expression '+' expression { 	
         $$ = $1 + $3; 
-        printf("\nAdd Value %d\n", $$);
+        printf("\nAdd Value: %d\n", $$);
     }
 	| expression '-' expression {
         $$ = $1 - $3; 
-        printf("\nSub Value %d\n", $$);
+        printf("\nSub Value: %d\n", $$);
 	}
 	| expression '*' expression {
         $$ = $1 * $3;
-        printf("\nMul Value %d\n", $$);
+        printf("\nMul Value: %d\n", $$);
 	}
 	| expression '/' expression { 	
         if($3) {
                 $$ = $1 / $3;
-                printf("\nDiv Value %d\n", $$);
+                printf("\nDiv Value: %d\n", $$);
         }
         else {
                 $$ = 0;
-                printf("\nDiv by Zero\t");
+                printf("\nDiv by Zero is Not Possible!\n");
         }
 	}
 	| expression '^' expression { 	
         $$=pow($1, $3); 
-        printf("\nPower Value %d\n", $$);
+        printf("\nPower Value: %d\n", $$);
 	}
 	| expression MOD expression {	 
         $$=$1 % $3; 
-        printf("\nRemainder Value %d\n", $$);
+        printf("\nRemainder Value: %d\n", $$);
 	}
 	| '(' expression ')' { $$ = $2; }
     | expression LT expression {
         $$ = $1 < $3;
-        printf("\nLess Than Value is %d\n", $$);
+        printf("\nLess Than Value: %d\n", $$);
 	}
 	| expression GT expression {
         $$ = $1 > $3; 
-        printf("\nGreater Than Value is %d\n", $$);
+        printf("\nGreater Than Value: %d\n", $$);
 	}
 	| expression LEQ expression { 
         $$ = $1 <= $3;
-        printf("\nLess Than or Equal To Value is %d\n", $$); 
+        printf("\nLess Than or Equal To Value: %d\n", $$); 
 	}
 	| expression GEQ expression { 
         $$ = $1 >= $3; 
-        printf("\nGreater Than or Equal To Value is %d\n", $$);
+        printf("\nGreater Than or Equal To Value: %d\n", $$);
 	}	
 	| expression EQ expression { 
         $$ = $1 == $3; 
-        printf("\nEqual To Value is %d\n", $$);
+        printf("\nEqual To Value: %d\n", $$);
 	}
 	| expression NEQ expression { 
         $$ = $1 != $3; 
-        printf("\nNot Eqaul To Value is %d\n", $$);
+        printf("\nNot Eqaul To Value: %d\n", $$);
 	}
     | VARIABLE INC {
         if( chkDeclared($1) == 0) {
@@ -456,7 +513,7 @@ expression:
             tmp = tmp+1;
             store[getValue($1)] = tmp;
             $$=store[getValue($1)];
-            printf("\nValue After Increment is %d\n", $$);
+            printf("\nValue After Increment: %d\n", $$);
         }
     }
 	| VARIABLE DEC {
@@ -469,7 +526,7 @@ expression:
             tmp = tmp-1;
             store[getValue($1)] = tmp;
             $$=store[getValue($1)];
-            printf("\nValue After Decrement is %d\n", $$);
+            printf("\nValue After Decrement: %d\n", $$);
         }
 	}
 	| NOT VARIABLE {
@@ -482,27 +539,27 @@ expression:
             tmp = !tmp;
             store[getValue($2)] = tmp;
             $$=store[getValue($2)];
-           printf("\nValue After NOT Operation is %d\n", $$);
+           printf("\nValue After NOT Operation: %d\n", $$);
         }
 	}
     | SIN '(' expression ')' {
-		printf("\nValue of Sin(%d) is %lf\n", $3, sin($3*3.1416/180)); 
+		printf("\nValue of Sin(%d): %lf\n", $3, sin($3*3.1416/180)); 
         $$ = sin($3*3.1416/180);
 	}
 	| COS '(' expression ')' {
-		printf("\nValue of Cos(%d) is %lf\n", $3, cos($3*3.1416/180)); 
+		printf("\nValue of Cos(%d): %lf\n", $3, cos($3*3.1416/180)); 
         $$ = cos($3*3.1416/180);
 	}
 	| TAN '(' expression ')' {
-		printf("\nValue of Tan(%d) is %lf\n", $3, tan($3*3.1416/180)); 
+		printf("\nValue of Tan(%d): %lf\n", $3, tan($3*3.1416/180)); 
         $$ = tan($3*3.1416/180);
 	}
 	| LOG '(' expression ')' {
-		printf("\nValue of Log(%d) is %lf\n", $3, (log($3*1.0)/log(10.0))); 
+		printf("\nValue of Log(%d): %lf\n", $3, (log($3*1.0)/log(10.0))); 
         $$ = (log($3*1.0)/log(10.0));
 	}
 	| LN '(' expression ')'	{
-		printf("\nValue of Ln(%d) is %lf\n", $3, (log($3))); 
+		printf("\nValue of Ln(%d): %lf\n", $3, (log($3))); 
         $$=(log($3));
 	}
     | ODDEVEN '(' expression ')' {
@@ -521,27 +578,27 @@ expression:
         for(i=1; i<=$3; i++) {
             ans = ans*i;
         }
-        printf("\nFactorial of %d is %d\n", $3, ans);
+        printf("\nFactorial of %d is: %d\n", $3, ans);
         $$ = ans;
     }
 	| MAX '(' expression ',' expression ')' {
         if( $3 < $5 ) {
             $$ = $5;
-            printf("\nMax Number Between %d and %d is %d\n", $3, $5, $5);
+            printf("\nMax Number Between %d and %d is: %d\n", $3, $5, $5);
         }
         else {
             $$ = $3;
-            printf("\nMax Number Between %d and %d is %d\n", $3, $5, $3);
+            printf("\nMax Number Between %d and %d is: %d\n", $3, $5, $3);
         }
     }
 	| MIN '(' expression ',' expression ')' {
         if( $3 < $5 ) {
             $$ = $3;
-            printf("\nMin Number Between %d and %d is %d\n", $3, $5, $3);
+            printf("\nMin Number Between %d and %d is: %d\n", $3, $5, $3);
         }
         else {
             $$ = $5;
-            printf("\nMin Number Between %d and %d is %d\n", $3, $5, $5);
+            printf("\nMin Number Between %d and %d is: %d\n", $3, $5, $5);
         }
     }
 	| PRIME '(' expression ')' {

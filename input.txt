@@ -53,4 +53,15 @@ int main() {
 	for(l=0, l less a, l inc 1) {
 		print(b);
 	}
+	while(l great b) {
+		print(c);
+	}
+	switch(a) {
+		case 8: {
+			print(a);
+		}
+		default: {
+			print(b);
+		}
+	}
 }
