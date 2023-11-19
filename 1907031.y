@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 extern FILE *yyin;
-//extern FILE *yyout;
+extern FILE *yyout;
 int lineNo = 0;
 int yylex();
 int yyerror(char *s);
