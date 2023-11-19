@@ -83,6 +83,10 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "else_if" { return ELSE_IF; }
 "else" { return ELSE; }
 
+"for" { return FOR; }
+"inc" { return FLINC; }
+"dec" { return FLDEC; }
+
 "-"?{digits}+ {
 	yylval.num = atoi(yytext);
 	return NUMBER;

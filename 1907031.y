@@ -118,6 +118,7 @@ int getValue(char *s){
 %token ODDEVEN FACTORIAL MAX MIN PRIME
 %token DEF DISPLAY
 %token IF ELSE_IF ELSE
+%token FOR FLINC FLDEC
 
 %left LT GT GEQ LEQ EQ NEQ
 %left '+' '-'
@@ -125,10 +126,6 @@ int getValue(char *s){
 %left '^'
 
 %%
-
-start: /* NULL */
-    | start program
-    ;
 
 program:
     import func main '(' ')' '{' statements '}' { printf("\nProgram successfully ended\n"); }
@@ -138,9 +135,8 @@ program:
 main:
     MAIN { printf("\nMain Function Declared!\n"); }
 
-import:
-    IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
-    | /* NULL */
+import: /* NULL */
+    | import IMPORT '<' HEADER '>' { printf("\nHeader File Found!\n"); }
     ;
 
 func: 
@@ -211,6 +207,59 @@ cstatement:
 	| else_condition '{' statements '}' {
 		printf("\nElse Block is Successfully Handled\n");
 	}
+    | for_start '(' for_loop ')' '{' statements '}' {
+        printf("\nFor Loop Execution Finshed!\n");
+    }
+    ;
+
+for_start:
+    FOR {
+        printf("\nFor Loop Started!\n");
+    }
+
+for_loop:
+    | VARIABLE '=' loop_assign ',' VARIABLE loop_exp loop_assign ',' VARIABLE f_state loop_assign {			
+        if(chkDeclared($1) == 0) {
+            printf("\n%s Not Declared!\n", $1);
+        }
+        if(strcmp($1, $5) == 0) {
+            if(strcmp($1, $9) == 0) {
+                printf("\nFor Loop Variable Declaration is Correct!\n");
+            }
+        }
+        else {
+            printf("\nDifferent Variables Used: %s %s %s\n", $1, $5, $9);	
+        } 			    
+    }
+
+loop_assign:
+    NUMBER
+    | VARIABLE {
+        if(chkDeclared($1) == 0) {
+            printf("\n%s Not Declared!\n", $1);
+        }
+        else {
+            printf("\nVariable Correctly Assigned to Loop!\n");	
+        }
+    }
+    ;
+
+loop_exp:
+    LT
+    | GT
+    | GEQ
+    | LEQ
+    | EQ
+    | NEQ
+    ;
+
+f_state:
+    FLINC {
+        printf("\nLoop is of Increasing Manner!\n");
+    }
+    | FLDEC {
+        printf("\nLoop is of Decreasing Manner!\n");
+    }
     ;
 
 if_condition:
@@ -286,7 +335,7 @@ call_param:
     ;
 
 declare:
-    type id END { printf("\nValid Syntax!\n"); } 
+    type id END { printf("\nValid Syntax For Variable Declaration!\n"); } 
 	;
 
 type:

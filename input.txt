@@ -49,4 +49,8 @@ int main() {
 	else {
 		print(a);
 	}
+	int l;
+	for(l=0, l less a, l inc 1) {
+		print(b);
+	}
 }

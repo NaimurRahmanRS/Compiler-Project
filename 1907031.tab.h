@@ -72,7 +72,10 @@
      DISPLAY = 288,
      IF = 289,
      ELSE_IF = 290,
-     ELSE = 291
+     ELSE = 291,
+     FOR = 292,
+     FLINC = 293,
+     FLDEC = 294
    };
 #endif
 
@@ -92,7 +95,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 96 "1907031.tab.h"
+#line 99 "1907031.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
