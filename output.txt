@@ -1,0 +1,212 @@
+
+Header File Found!
+
+New Function Declared With Name: Abc
+
+New Variable Declared With Name: i and Type: Int
+
+Valid Function Parameter Declaration!
+
+New Variable Declared With Name: j and Type: Int
+
+Valid Function Parameter Declaration!
+
+New Value Assigned to Variable Name: i and Value: 5
+
+User Defined Function Ended!
+
+Main Function Declared!
+
+New Variable Declared With Name: a and Type: Int
+
+New Value Assigned to Variable Name: a and Value: 6
+
+Valid Syntax For Variable Declaration!
+
+New Variable Declared With Name: b and Type: Int
+
+New Value Assigned to Variable Name: b and Value: 6
+
+Valid Syntax For Variable Declaration!
+
+New Variable Declared With Name: c and Type: Int
+
+New Value Assigned to Variable Name: c and Value: 7
+
+New Variable Declared With Name: d and Type: Int
+
+New Value Assigned to Variable Name: d and Value: 5
+
+Valid Syntax For Variable Declaration!
+
+New Variable Declared With Name: x and Type: Float
+
+Valid Syntax For Variable Declaration!
+
+New Variable Declared With Name: y and Type: String
+
+Valid Syntax For Variable Declaration!
+
+New Value Assigned to Variable Name: c and Value: 3
+
+New Value Assigned to Variable Name: b and Value: 8
+
+Add Value: 11
+
+New Value Assigned to Variable Name: a and Value: 11
+
+Sub Value: 5
+
+New Value Assigned to Variable Name: a and Value: 5
+
+Remainder Value: 2
+
+New Value Assigned to Variable Name: a and Value: 2
+
+Mul Value: 24
+
+New Value Assigned to Variable Name: a and Value: 24
+
+Div Value: 2
+
+New Value Assigned to Variable Name: a and Value: 2
+
+Power Value: 512
+
+New Value Assigned to Variable Name: a and Value: 512
+
+Div Value: 2
+
+Add Value: 10
+
+Add Value: 13
+
+New Value Assigned to Variable Name: a and Value: 13
+
+Greater Than Value: 1
+
+New Value Assigned to Variable Name: a and Value: 1
+
+Less Than Value: 0
+
+New Value Assigned to Variable Name: a and Value: 0
+
+Equal To Value: 0
+
+New Value Assigned to Variable Name: a and Value: 0
+
+Not Eqaul To Value: 1
+
+New Value Assigned to Variable Name: a and Value: 1
+
+Less Than or Equal To Value: 0
+
+New Value Assigned to Variable Name: a and Value: 0
+
+Greater Than or Equal To Value: 1
+
+New Value Assigned to Variable Name: a and Value: 1
+
+Value After Increment: 2
+
+Value After Decrement: 1
+
+Value After NOT Operation: 0
+
+Value of Sin(8): 0.139173
+
+Value of Cos(8): 0.990268
+
+Value of Tan(8): 0.140541
+
+Value of Log(8): 0.903090
+
+Value of Ln(8): 2.079442
+
+8 is An Even Number
+
+Factorial of 8 is: 40320
+
+New Value Assigned to Variable Name: a and Value: 40320
+
+Max Number Between 8 and 3 is: 8
+
+New Value Assigned to Variable Name: a and Value: 8
+
+Min Number Between 8 and 3 is: 3
+
+New Value Assigned to Variable Name: a and Value: 3
+
+8 is Not A Prime Number
+
+Abc Function is Called!
+
+b Passed as Parameter For Function!
+
+c Passed as Parameter For Function!
+
+Valid Function Call!
+
+Printing Value of the variable a: 3
+
+Equal To Value: 0
+
+If Block is Not Executed!
+
+Printing Value of the variable a: 3
+
+If Block is Successfully Handled!
+
+Equal To Value: 1
+
+Else If Block is Executed!
+
+Printing Value of the variable a: 3
+
+Else If Block is Successfully Handled!
+
+Else Block is Not Executed!
+
+Printing Value of the variable a: 3
+
+Else Block is Successfully Handled!
+
+New Variable Declared With Name: l and Type: Int
+
+Valid Syntax For Variable Declaration!
+
+For Loop Started!
+
+Variable Correctly Assigned to Loop!
+
+Loop is of Increasing Manner!
+
+For Loop Variable Declaration is Correct!
+
+Printing Value of the variable b: 8
+
+For Loop Execution Finshed!
+
+While Loop Started!
+
+Variable Correctly Assigned to Loop!
+
+While Loop Variable Declaration is Correct!
+
+Printing Value of the variable c: 3
+
+While Loop Execution Finshed!
+
+Switch Case Started!
+
+Printing Value of the variable a: 3
+
+Switch Case No: 8 is Ignored!
+
+Printing Value of the variable b: 8
+
+Switch Default Case is Executed!
+
+Switch Execution Finshed!
+
+Program Successfully Ended!
