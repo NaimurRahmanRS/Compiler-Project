@@ -41,9 +41,13 @@ Valid Syntax For Variable Declaration!
 
 New Variable Declared With Name: x and Type: Float
 
+New Value Assigned to Variable Name: x and Value: 7.500000
+
 Valid Syntax For Variable Declaration!
 
 New Variable Declared With Name: y and Type: String
+
+New Value Assigned to Variable Name: y and Value: "abc"
 
 Valid Syntax For Variable Declaration!
 
@@ -51,11 +55,11 @@ New Value Assigned to Variable Name: c and Value: 3
 
 New Value Assigned to Variable Name: b and Value: 8
 
-Add Value: 11
+Add Value: 11.000000
 
 New Value Assigned to Variable Name: a and Value: 11
 
-Sub Value: 5
+Sub Value: 5.000000
 
 New Value Assigned to Variable Name: a and Value: 5
 
@@ -63,23 +67,23 @@ Remainder Value: 2
 
 New Value Assigned to Variable Name: a and Value: 2
 
-Mul Value: 24
+Mul Value: 24.000000
 
 New Value Assigned to Variable Name: a and Value: 24
 
-Div Value: 2
+Div Value: 2.666667
 
 New Value Assigned to Variable Name: a and Value: 2
 
-Power Value: 512
+Power Value: 512.000000
 
 New Value Assigned to Variable Name: a and Value: 512
 
-Div Value: 2
+Div Value: 2.666667
 
-Add Value: 10
+Add Value: 10.666667
 
-Add Value: 13
+Add Value: 13.666667
 
 New Value Assigned to Variable Name: a and Value: 13
 
@@ -109,33 +113,47 @@ New Value Assigned to Variable Name: a and Value: 1
 
 Value After Increment: 2
 
+New Value Assigned to Variable Name: c and Value: 2
+
 Value After Decrement: 1
+
+New Value Assigned to Variable Name: c and Value: 1
 
 Value After NOT Operation: 0
 
-Value of Sin(8): 0.139173
+New Value Assigned to Variable Name: c and Value: 0
 
-Value of Cos(8): 0.990268
+Value of Sin(8.000000): 0.139173
 
-Value of Tan(8): 0.140541
+New Value Assigned to Variable Name: c and Value: 0
 
-Value of Log(8): 0.903090
+Value of Cos(8.000000): 0.990268
 
-Value of Ln(8): 2.079442
+New Value Assigned to Variable Name: c and Value: 0
+
+Value of Tan(8.000000): 0.140541
+
+New Value Assigned to Variable Name: c and Value: 0
+
+Value of Log(8.000000): 0.903090
+
+New Value Assigned to Variable Name: c and Value: 0
+
+Value of Ln(8.000000): 2.079442
+
+New Value Assigned to Variable Name: c and Value: 2
 
 8 is An Even Number
 
 Factorial of 8 is: 40320
 
-New Value Assigned to Variable Name: a and Value: 40320
-
-Max Number Between 8 and 3 is: 8
+Max Number Between 8.000000 and 2.000000 is: 8.000000
 
 New Value Assigned to Variable Name: a and Value: 8
 
-Min Number Between 8 and 3 is: 3
+Min Number Between 8.000000 and 2.000000 is: 2.000000
 
-New Value Assigned to Variable Name: a and Value: 3
+New Value Assigned to Variable Name: a and Value: 2
 
 8 is Not A Prime Number
 
@@ -147,13 +165,13 @@ c Passed as Parameter For Function!
 
 Valid Function Call!
 
-Printing Value of the variable a: 3
+Printing Value of the variable a: 2
 
 Equal To Value: 0
 
 If Block is Not Executed!
 
-Printing Value of the variable a: 3
+Printing Value of the variable a: 2
 
 If Block is Successfully Handled!
 
@@ -161,13 +179,13 @@ Equal To Value: 1
 
 Else If Block is Executed!
 
-Printing Value of the variable a: 3
+Printing Value of the variable a: 2
 
 Else If Block is Successfully Handled!
 
 Else Block is Not Executed!
 
-Printing Value of the variable a: 3
+Printing Value of the variable a: 2
 
 Else Block is Successfully Handled!
 
@@ -193,13 +211,13 @@ Variable Correctly Assigned to Loop!
 
 While Loop Variable Declaration is Correct!
 
-Printing Value of the variable c: 3
+Printing Value of the variable c: 2
 
 While Loop Execution Finshed!
 
 Switch Case Started!
 
-Printing Value of the variable a: 3
+Printing Value of the variable a: 2
 
 Switch Case No: 8 is Ignored!
 

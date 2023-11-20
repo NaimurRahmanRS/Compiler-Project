@@ -5,14 +5,14 @@
 #include<string.h>
 extern FILE *yyin;
 extern FILE *yyout;
-int lineNo = 0;
 int yylex();
 int yyerror(char *s);
 
 // Symbol Table Arrays
-char var_name[1000][1000];
+char var_name[1000][100];
 int store[1000];
 float store_float[1000];
+char store_String[1000][100];
 int type[1000];
 int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 
@@ -44,6 +44,8 @@ int init_asn(char *s){
     }
     strcpy(var_name[var_cnt], s);
     store[var_cnt] = 0;
+    store_float[var_cnt] = 0.0;
+    strcpy(store_String[var_cnt], "");
     type[var_cnt] = ttp;
     char name[10];
     if(ttp == 0) {
@@ -67,6 +69,8 @@ int init_asn_func(char *s){
     }
     strcpy(var_name[var_cnt], s);
     store[var_cnt] = 0;
+    store_float[var_cnt] = 0.0;
+    strcpy(store_String[var_cnt], "");
     type[var_cnt] = 3;
     printf("\nNew Function Declared With Name: %s\n", var_name[var_cnt]);
     var_cnt++;
@@ -74,7 +78,7 @@ int init_asn_func(char *s){
 }
 
 // Assigning Value to Variable
-int setValue(char *s, int val){
+int setValue(char *s, char* val){
     if(chkDeclared(s) == 0){
         return 0;
     }
@@ -85,8 +89,22 @@ int setValue(char *s, int val){
             break;
         }
     }
-    store[ok] = val;
-    printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store[ok]);
+    if(type[ok] == 0){
+        store[ok] = atoi(val);
+        printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store[ok]);
+    }
+    else if(type[ok] == 1){
+        store_float[ok] = atof(val);
+        printf("\nNew Value Assigned to Variable Name: %s and Value: %f\n", var_name[ok], store_float[ok]);
+    }
+    else if(type[ok] == 2){
+        strcpy(store_String[ok], val);
+        //store_String[ok] = val;
+        printf("\nNew Value Assigned to Variable Name: %s and Value: %s\n", var_name[ok], store_String[ok]);
+    }
+    else{
+        printf("\nCan't Assign Value as Variable is a Function!\n");
+    }
     return 1;
 }
 
@@ -114,8 +132,9 @@ int getValue(char *s){
 %token END INT FLOAT STRING MOD
 %token LT GT GEQ LEQ EQ NEQ
 %token <string> VARIABLE
-%token <num> NUMBER
-%type <num> expression
+%token <string> NUMBER
+%type <string> expression
+%token <string> STR 
 %token IMPORT HEADER MAIN
 %token INC DEC NOT
 %token SIN COS LOG TAN LN
@@ -200,7 +219,19 @@ cstatement:
 			printf("\nCan't print, Variable is not declared\n");
         }
         else {
-            printf("\nPrinting Value of the variable %s: %d\n", $3, store[getValue($3)]);
+            int index = getValue($3);
+            if(type[index] == 0){
+                printf("\nPrinting Value of the variable %s: %d\n", $3, store[index]);
+            }
+            else if(type[index] == 1){
+                printf("\nPrinting Value of the variable %s: %f\n", $3, store_float[index]);
+            }
+            else if(type[index] == 2){
+                printf("\nPrinting Value of the variable %s: %s\n", $3, store_String[index]);
+            }
+            else{
+                printf("\nCan't Display Value as Variable is a Function!\n");
+            }
         }
 	}
     | if_condition '{' statements '}' {
@@ -232,18 +263,19 @@ switch_start:
 switch_exp :
 	expression {
         switch_case = 0;
-        switch_var = $1;
+        switch_var = atoi($1);
     }
 	;
 
 switch_statement: /* NULL */
 	| switch_statement CASE expression ':' '{' statements '}' {
-        if($3 == switch_var && switch_case == 0 ) {
-            printf("\nSwitch Case Executed is %d!\n", $3);
+        int x = atoi($3);
+        if(x == switch_var && switch_case == 0 ) {
+            printf("\nSwitch Case Executed is %d!\n", x);
             switch_case = 1;
         }
         else {
-            printf("\nSwitch Case No: %d is Ignored!\n", $3);
+            printf("\nSwitch Case No: %d is Ignored!\n", x);
         }
     }
 	| switch_statement DEFAULT ':' '{' statements '}' {
@@ -321,7 +353,8 @@ f_state:
 
 if_condition:
     IF '(' expression ')' {
-        if( $3 == 1 ) {
+        int x = atoi($3);
+        if( x >= 1 ) {
 			ifdone[ifptr] = 1;
 			printf("\nIf Block is Executed!\n");
 		}
@@ -333,7 +366,8 @@ if_condition:
 
 else_if_condition:
     ELSE_IF '(' expression ')' {
-        if( $3 == 1 && ifdone[ifptr] == 0) {
+        int x = atoi($3);
+        if( x >= 1 && ifdone[ifptr] == 0) {
 			ifdone[ifptr] = 1;
 			printf("\nElse If Block is Executed!\n");
 		}
@@ -437,172 +471,305 @@ id:
     ;
 
 expression:
-    NUMBER { $$ = $1; }
+    NUMBER {
+        $$ = malloc(20);
+        strcpy($$, $1); 
+    }
+    | STR {
+        $$ = malloc(20);
+        strcpy($$, $1); 
+    }
 	| VARIABLE {
+        $$ = malloc(20);
         if(chkDeclared($1) == 0) {
-            $$=0;
+            sprintf($$, "%d", 0);
             printf("\n%s Not Declared!\n", $1);
         }
         else {
             int index = getValue($1);
-            $$ = store[index];
+            if(type[index] == 0){
+                sprintf($$, "%d", store[index]);
+            }
+            else if(type[index] == 1){
+                sprintf($$, "%f", store_float[index]);
+            }
+            else if(type[index] == 2){
+                strcpy($$, store_String[index]);
+            }
+            else{
+                printf("\nCan't Process Value as Variable is a Function or Invalid!\n");
+            }
         }
     }
-    | expression '+' expression { 	
-        $$ = $1 + $3; 
-        printf("\nAdd Value: %d\n", $$);
+    | expression '+' expression { 
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        float num3 = num1 + num2;
+        sprintf($$, "%f", num3);	 
+        printf("\nAdd Value: %f\n", num3);
     }
 	| expression '-' expression {
-        $$ = $1 - $3; 
-        printf("\nSub Value: %d\n", $$);
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        float num3 = num1 - num2;
+        sprintf($$, "%f", num3);
+        printf("\nSub Value: %f\n", num3);
 	}
 	| expression '*' expression {
-        $$ = $1 * $3;
-        printf("\nMul Value: %d\n", $$);
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        float num3 = num1 * num2;
+        sprintf($$, "%f", num3);
+        printf("\nMul Value: %f\n", num3);
 	}
-	| expression '/' expression { 	
-        if($3) {
-                $$ = $1 / $3;
-                printf("\nDiv Value: %d\n", $$);
+	| expression '/' expression {
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3); 	
+        if(num2!=0.0) {
+            float num3 = num1 / num2;
+            sprintf($$, "%f", num3);
+            printf("\nDiv Value: %f\n", num3);
         }
         else {
-                $$ = 0;
-                printf("\nDiv by Zero is Not Possible!\n");
+            sprintf($$, "%f", 0);
+            printf("\nDiv by Zero is Not Possible!\n");
         }
 	}
-	| expression '^' expression { 	
-        $$=pow($1, $3); 
-        printf("\nPower Value: %d\n", $$);
+	| expression '^' expression {
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        float num3 = pow(num1, num2);
+        sprintf($$, "%f", num3);
+        printf("\nPower Value: %f\n", num3);
 	}
-	| expression MOD expression {	 
-        $$=$1 % $3; 
-        printf("\nRemainder Value: %d\n", $$);
+	| expression MOD expression {
+        $$ = malloc(20);
+        int num1 = atoi($1);
+        int num2 = atoi($3);
+        int num3 = num1 % num2;
+        sprintf($$, "%d", num3);	 
+        printf("\nRemainder Value: %d\n", num3);
 	}
-	| '(' expression ')' { $$ = $2; }
+	| '(' expression ')' {
+        $$ = malloc(20);
+        strcpy($$, $2); 
+    }
     | expression LT expression {
-        $$ = $1 < $3;
-        printf("\nLess Than Value: %d\n", $$);
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 < num2;
+        sprintf($$, "%d", num3);
+        printf("\nLess Than Value: %d\n", num3);
 	}
 	| expression GT expression {
-        $$ = $1 > $3; 
-        printf("\nGreater Than Value: %d\n", $$);
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 > num2;
+        sprintf($$, "%d", num3);
+        printf("\nGreater Than Value: %d\n", num3);
 	}
-	| expression LEQ expression { 
-        $$ = $1 <= $3;
-        printf("\nLess Than or Equal To Value: %d\n", $$); 
+	| expression LEQ expression {
+        $$ = malloc(20); 
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 <= num2;
+        sprintf($$, "%d", num3);
+        printf("\nLess Than or Equal To Value: %d\n", num3); 
 	}
-	| expression GEQ expression { 
-        $$ = $1 >= $3; 
-        printf("\nGreater Than or Equal To Value: %d\n", $$);
+	| expression GEQ expression {
+        $$ = malloc(20); 
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 >= num2;
+        sprintf($$, "%d", num3);
+        printf("\nGreater Than or Equal To Value: %d\n", num3);
 	}	
-	| expression EQ expression { 
-        $$ = $1 == $3; 
-        printf("\nEqual To Value: %d\n", $$);
+	| expression EQ expression {
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 == num2;
+        sprintf($$, "%d", num3);
+        printf("\nEqual To Value: %d\n", num3);
 	}
-	| expression NEQ expression { 
-        $$ = $1 != $3; 
-        printf("\nNot Eqaul To Value: %d\n", $$);
+	| expression NEQ expression {
+        $$ = malloc(20);
+        float num1 = atof($1);
+        float num2 = atof($3);
+        int num3 = num1 != num2;
+        sprintf($$, "%d", num3);
+        printf("\nNot Eqaul To Value: %d\n", num3);
 	}
     | VARIABLE INC {
+        $$ = malloc(20);
         if( chkDeclared($1) == 0) {
-            $$=0;
-            printf("\n%s Not Declared!\n", $1);
+            sprintf($$, "%d", 0);
+            printf("\n%s is Not Declared!\n", $1);
         }
         else {
-            int tmp = store[getValue($1)];
-            tmp = tmp+1;
-            store[getValue($1)] = tmp;
-            $$=store[getValue($1)];
-            printf("\nValue After Increment: %d\n", $$);
+            int index = getValue($1);
+            if(type[index] == 0){
+                int tmp = store[index];
+                tmp = tmp+1;
+                store[index] = tmp;
+                sprintf($$, "%d", tmp);
+                printf("\nValue After Increment: %d\n", tmp);
+            }
+            else if(type[index] == 1){
+                float tmp = store_float[index];
+                tmp = tmp+1;
+                store_float[index] = tmp;
+                sprintf($$, "%f", tmp);
+                printf("\nValue After Increment: %f\n", tmp);
+            }
+            else{
+                printf("\nCan't Process Increament as Variable is a String or a Function!\n");
+            }
         }
     }
 	| VARIABLE DEC {
+        $$ = malloc(20);
   		if( chkDeclared($1) == 0) {
-    		$$=0;
+            sprintf($$, "%d", 0);
      		printf("\n%s Not Declared!\n", $1);
    		}
     	else {
-            int tmp = store[getValue($1)];
-            tmp = tmp-1;
-            store[getValue($1)] = tmp;
-            $$=store[getValue($1)];
-            printf("\nValue After Decrement: %d\n", $$);
+            int index = getValue($1);
+            if(type[index] == 0){
+                int tmp = store[index];
+                tmp = tmp-1;
+                store[index] = tmp;
+                sprintf($$, "%d", tmp);
+                printf("\nValue After Decrement: %d\n", tmp);
+            }
+            else if(type[index] == 1){
+                float tmp = store_float[index];
+                tmp = tmp-1;
+                store_float[index] = tmp;
+                sprintf($$, "%f", tmp);
+                printf("\nValue After Decrement: %f\n", tmp);
+            }
+            else{
+                printf("\nCan't Process Decrement as Variable is a String or a Function!\n");
+            }
         }
 	}
-	| NOT VARIABLE {
+    | NOT VARIABLE {
+        $$ = malloc(20);
   		if( chkDeclared($2) == 0) {
-            $$=0;
+            sprintf($$, "%d", 0);
             printf("\n%s Not Declared!\n", $2);
    		}
         else {
-            int tmp = store[getValue($2)];
-            tmp = !tmp;
-            store[getValue($2)] = tmp;
-            $$=store[getValue($2)];
-           printf("\nValue After NOT Operation: %d\n", $$);
+            int index = getValue($2);
+            if(type[index] == 0){
+                int tmp = store[index];
+                tmp = !tmp;
+                store[index] = tmp;
+                sprintf($$, "%d", tmp);
+                printf("\nValue After NOT Operation: %d\n", tmp);
+            }
+            else if(type[index] == 1){
+                int tmp = store_float[index];
+                tmp = !tmp;
+                store_float[index] = tmp;
+                sprintf($$, "%d", tmp);
+                printf("\nValue After NOT Operation: %d\n", tmp);
+            }
+            else{
+                printf("\nCan't Process NOT Operation as Variable is a String or a Function!\n");
+            }
         }
 	}
     | SIN '(' expression ')' {
-		printf("\nValue of Sin(%d): %lf\n", $3, sin($3*3.1416/180)); 
-        $$ = sin($3*3.1416/180);
+        $$ = malloc(20);
+        float x = atof($3);
+		printf("\nValue of Sin(%f): %lf\n", x, sin(x*3.1416/180));
+        sprintf($$, "%lf", sin(x*3.1416/180));
 	}
 	| COS '(' expression ')' {
-		printf("\nValue of Cos(%d): %lf\n", $3, cos($3*3.1416/180)); 
-        $$ = cos($3*3.1416/180);
+        $$ = malloc(20);
+        float x = atof($3);
+		printf("\nValue of Cos(%f): %lf\n", x, cos(x*3.1416/180));
+        sprintf($$, "%lf", cos(x*3.1416/180));
 	}
 	| TAN '(' expression ')' {
-		printf("\nValue of Tan(%d): %lf\n", $3, tan($3*3.1416/180)); 
-        $$ = tan($3*3.1416/180);
+        $$ = malloc(20);
+        float x = atof($3);
+		printf("\nValue of Tan(%f): %lf\n", x, tan(x*3.1416/180));
+        sprintf($$, "%lf", tan(x*3.1416/180));
 	}
 	| LOG '(' expression ')' {
-		printf("\nValue of Log(%d): %lf\n", $3, (log($3*1.0)/log(10.0))); 
-        $$ = (log($3*1.0)/log(10.0));
+        $$ = malloc(20);
+        float x = atof($3);
+		printf("\nValue of Log(%f): %lf\n", x, (log(x*1.0)/log(10.0)));
+        sprintf($$, "%lf", (log(x*1.0)/log(10.0)));
 	}
 	| LN '(' expression ')'	{
-		printf("\nValue of Ln(%d): %lf\n", $3, (log($3))); 
-        $$=(log($3));
+        $$ = malloc(20);
+        float x = atof($3);
+		printf("\nValue of Ln(%f): %lf\n", x, (log(x)));
+        sprintf($$, "%lf", (log(x)));
 	}
     | ODDEVEN '(' expression ')' {
-        if($3%2==0) {
-            $$ = 0;
-            printf("\n%d is An Even Number\n", $3);
+        $$ = malloc(20);
+        int x = atoi($3);
+        if(x%2==0) {
+            sprintf($$, "%d", 0);
+            printf("\n%d is An Even Number\n", x);
         } 
         else {
-            $$ = 1;
-            printf("\n%d is An Odd Number\n", $3);
+            sprintf($$, "%d", 1);
+            printf("\n%d is An Odd Number\n", x);
         }        
     }
 	| FACTORIAL '(' expression ')' {
+        $$ = malloc(20);
         int ans = 1;
         int i;
-        for(i=1; i<=$3; i++) {
+        int x = atoi($3);
+        for(i=1; i<=x; i++) {
             ans = ans*i;
         }
-        printf("\nFactorial of %d is: %d\n", $3, ans);
-        $$ = ans;
+        printf("\nFactorial of %d is: %d\n", x, ans);
+        sprintf($$, "%d", ans);
     }
 	| MAX '(' expression ',' expression ')' {
-        if( $3 < $5 ) {
-            $$ = $5;
-            printf("\nMax Number Between %d and %d is: %d\n", $3, $5, $5);
+        $$ = malloc(20);
+        float num1 = atof($3);
+        float num2 = atof($5);
+        if( num1 < num2 ) {
+            sprintf($$, "%f", num2);
+            printf("\nMax Number Between %f and %f is: %f\n", num1, num2, num2);
         }
         else {
-            $$ = $3;
-            printf("\nMax Number Between %d and %d is: %d\n", $3, $5, $3);
+            sprintf($$, "%f", num1);
+            printf("\nMax Number Between %f and %f is: %f\n", num1, num2, num1);
         }
     }
 	| MIN '(' expression ',' expression ')' {
-        if( $3 < $5 ) {
-            $$ = $3;
-            printf("\nMin Number Between %d and %d is: %d\n", $3, $5, $3);
+        $$ = malloc(20);
+        float num1 = atof($3);
+        float num2 = atof($5);
+        if( num1 < num2 ) {
+            sprintf($$, "%f", num1);
+            printf("\nMin Number Between %f and %f is: %f\n", num1, num2, num1);
         }
         else {
-            $$ = $5;
-            printf("\nMin Number Between %d and %d is: %d\n", $3, $5, $5);
+            sprintf($$, "%f", num2);
+            printf("\nMin Number Between %f and %f is: %f\n", num1, num2, num2);
         }
     }
 	| PRIME '(' expression ')' {
-        int x = $3;
+        $$ = malloc(20);
+        int x = atoi($3);
         int ck = 0;
         int i; 
         for(i=2; i*i<=x; i++) {
@@ -611,12 +778,12 @@ expression:
                 break;
             }
         }
-        if(ck) {
-            $$ = 0;
+        if(ck || x==1) {
+            sprintf($$, "%d", 0);
             printf("\n%d is Not A Prime Number\n", x);
         }
         else {
-            $$ = 1;
+            sprintf($$, "%d", 1);
             printf("\n%d is A Prime Number\n", x);
         }
     }
@@ -632,8 +799,8 @@ int yywrap()
 int main()
 {	
 	yyin = freopen("input.txt","r",stdin);
-	//yyout = freopen("output.txt","w",stdout);
-	yyparse();
+	yyout = freopen("output.txt","w",stdout);
+    yyparse();
 	return 0;	
 }
 

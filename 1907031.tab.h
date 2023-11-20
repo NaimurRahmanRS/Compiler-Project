@@ -52,34 +52,35 @@
      NEQ = 268,
      VARIABLE = 269,
      NUMBER = 270,
-     IMPORT = 271,
-     HEADER = 272,
-     MAIN = 273,
-     INC = 274,
-     DEC = 275,
-     NOT = 276,
-     SIN = 277,
-     COS = 278,
-     LOG = 279,
-     TAN = 280,
-     LN = 281,
-     ODDEVEN = 282,
-     FACTORIAL = 283,
-     MAX = 284,
-     MIN = 285,
-     PRIME = 286,
-     DEF = 287,
-     DISPLAY = 288,
-     IF = 289,
-     ELSE_IF = 290,
-     ELSE = 291,
-     FOR = 292,
-     FLINC = 293,
-     FLDEC = 294,
-     WHILE = 295,
-     CASE = 296,
-     SWITCH = 297,
-     DEFAULT = 298
+     STR = 271,
+     IMPORT = 272,
+     HEADER = 273,
+     MAIN = 274,
+     INC = 275,
+     DEC = 276,
+     NOT = 277,
+     SIN = 278,
+     COS = 279,
+     LOG = 280,
+     TAN = 281,
+     LN = 282,
+     ODDEVEN = 283,
+     FACTORIAL = 284,
+     MAX = 285,
+     MIN = 286,
+     PRIME = 287,
+     DEF = 288,
+     DISPLAY = 289,
+     IF = 290,
+     ELSE_IF = 291,
+     ELSE = 292,
+     FOR = 293,
+     FLINC = 294,
+     FLDEC = 295,
+     WHILE = 296,
+     CASE = 297,
+     SWITCH = 298,
+     DEFAULT = 299
    };
 #endif
 
@@ -90,7 +91,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 108 "1907031.y"
+#line 126 "1907031.y"
 
     int num;
     float flt;
@@ -99,7 +100,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 103 "1907031.tab.h"
+#line 104 "1907031.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -31,8 +31,8 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 
 %%
 
-{S_comment} { printf("Single Line Comment\n"); }
-{M_comment} { printf("Multiple Line Comment\n"); }
+{S_comment} { printf("\nSingle Line Comment\n"); }
+{M_comment} { printf("\nMultiple Line Comment\n"); }
 
 "int" { return INT; }
 "float"	{ return FLOAT; }
@@ -94,13 +94,18 @@ M_comment \/\*([^*]|\*[^\/])*\*\/
 "default" { return DEFAULT; }
 
 "-"?{digits}+ {
-	yylval.num = atoi(yytext);
+	yylval.string = strdup(yytext);
 	return NUMBER;
 }
 
 "-"?({digits}+)?"."{digits}+ {
-	yylval.num = atof(yytext);
+	yylval.string = strdup(yytext);
 	return NUMBER;
+}
+
+"\""[^"]*"\"" {
+	yylval.string = strdup(yytext);
+	return STR;
 }
 
 {Datatype}[ ]+"main" { return MAIN; }
