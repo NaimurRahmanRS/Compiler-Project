@@ -1,0 +1,71 @@
+#include <stdio.h>
+
+function Abc (int i, int j) {
+	i = 5;
+}
+
+int main() {
+	int a = 6;
+	int b = a;
+	int c = 7, d = 5;
+	float x = 7.5;
+	string y = "abc";
+	c = 3;
+	b = 8;
+	a = b + c;
+	a = b - c;
+	a = b mod c;
+	a = b*c;
+	a = b/c;
+	a = b^c;
+	a = b+b/c+c;
+	a = b great c;
+	a = b less c;
+	a = b equal c;
+	a = b not_eq c;
+	a = b less_eq c;
+	a = b great_eq c;
+	c = a++;
+	c = a--;
+	c = !a;
+	c = sin(b);
+	c = cos(b);
+	c = tan(b);
+	c = log(b);
+	c = ln(b);
+	isOddEven(b);
+	factorial(b);
+	a = max(b,c);
+	a = min(b,c);
+	isPrime(b);
+	Abc(b,c);
+	print(a);
+	if(a equal b) {
+		print(a);
+	}
+	else_if(a equal c) {
+		print(a);
+	}
+	else {
+		print(a);
+	}
+	int l;
+	for(l=0, l less a, l inc 1) {
+		print(b);
+	}
+	while(l great b) {
+		print(c);
+	}
+	switch(a) {
+		case 8: {
+			print(a);
+		}
+		default: {
+			print(b);
+		}
+	}
+	//single line comment
+	/*Multi
+	Line
+	Comment*/
+}
