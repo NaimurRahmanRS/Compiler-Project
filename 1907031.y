@@ -799,7 +799,7 @@ int yywrap()
 int main()
 {	
 	yyin = freopen("input.txt","r",stdin);
-	yyout = freopen("output.txt","w",stdout);
+	//yyout = freopen("output.txt","w",stdout);
     yyparse();
 	return 0;	
 }

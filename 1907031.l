@@ -1,16 +1,5 @@
-chars [a-zA-Z]
 digits [0-9]
-special [$_@]
-space " "
-newline "\n"
-Datatype "int"|"float"|"char"|"double"|"void"|"string"
-Arithmatic_operator "+"|"-"|"/"|"*"|"&"|"|"|"mod"
-Logical_operator "&&"|"||"|"!!"|"^^"
-Unary_operator "#++"|"#--"|"!#"
-Relation_operator "less"|"great"|"eqeq"|"great_eq"|"less_eq"|"noteq"
-Assignment_operator "="|"+="|"-="|"/="|"*="
-integer (-|+)?[0-9]+
-char [A-Za-z]+
+Datatype "int"|"float"|"void"|"string"
 Identifiers [a-zA-Z][a-zA-Z0-9]*
 S_comment \/\/[^\n]*
 M_comment \/\*([^*]|\*[^\/])*\*\/
