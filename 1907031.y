@@ -10,15 +10,15 @@ int yyerror(char *s);
 
 // Symbol Table Arrays
 char var_name[1000][100];
-int store[1000];
+int store_int[1000];
 float store_float[1000];
 char store_String[1000][100];
 int type[1000];
-int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
+int var_type_pointer = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 
 // Conditional Statement Variables
-int ifptr = 0;
-int ifdone[1000];
+int if_pointer = 0;
+int store_if[1000];
 
 // Switch Handling Variables
 int switch_var = 0; 
@@ -28,7 +28,7 @@ int switch_case = 0;
 int var_cnt = 0;
 
 // Variable Declaration Check
-int chkDeclared(char *s){
+int checkDeclared(char *s){
     int i;
     for(i=0; i<var_cnt; i++){
         if(strcmp(var_name[i], s) == 0)
@@ -38,23 +38,23 @@ int chkDeclared(char *s){
 }
 
 // New Variable Declaration
-int init_asn(char *s){
-    if(chkDeclared(s) == 1){
+int varAssign(char *s){
+    if(checkDeclared(s) == 1){
         return 0;
     }
     strcpy(var_name[var_cnt], s);
-    store[var_cnt] = 0;
+    store_int[var_cnt] = 0;
     store_float[var_cnt] = 0.0;
     strcpy(store_String[var_cnt], "");
-    type[var_cnt] = ttp;
+    type[var_cnt] = var_type_pointer;
     char name[10];
-    if(ttp == 0) {
+    if(var_type_pointer == 0) {
         strcpy(name, "Int");
     }
-    else if(ttp == 1) {
+    else if(var_type_pointer == 1) {
         strcpy(name, "Float");
     }
-    else if(ttp == 2) {
+    else if(var_type_pointer == 2) {
         strcpy(name, "String");
     }
     printf("\nNew Variable Declared With Name: %s and Type: %s\n", var_name[var_cnt], name);
@@ -63,12 +63,12 @@ int init_asn(char *s){
 }
 
 // New Function Declaration
-int init_asn_func(char *s){
-    if(chkDeclared(s) == 1){
+int functionAssign(char *s){
+    if(checkDeclared(s) == 1){
         return 0;
     }
     strcpy(var_name[var_cnt], s);
-    store[var_cnt] = 0;
+    store_int[var_cnt] = 0;
     store_float[var_cnt] = 0.0;
     strcpy(store_String[var_cnt], "");
     type[var_cnt] = 3;
@@ -79,7 +79,7 @@ int init_asn_func(char *s){
 
 // Assigning Value to Variable
 int setValue(char *s, char* val){
-    if(chkDeclared(s) == 0){
+    if(checkDeclared(s) == 0){
         return 0;
     }
     int ok=0, i;
@@ -90,8 +90,8 @@ int setValue(char *s, char* val){
         }
     }
     if(type[ok] == 0){
-        store[ok] = atoi(val);
-        printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store[ok]);
+        store_int[ok] = atoi(val);
+        printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store_int[ok]);
     }
     else if(type[ok] == 1){
         store_float[ok] = atof(val);
@@ -172,11 +172,11 @@ func:
 
 func_head: 
     DEF VARIABLE {
-        if(chkDeclared($2)==1) {
+        if(checkDeclared($2)==1) {
             printf("\nDuplicate Function Name!\n");
         }
         else {
-            init_asn_func($2);
+            functionAssign($2);
         }
     }
 
@@ -187,11 +187,11 @@ param:
 
 pid	:
 	 VARIABLE {
-		if(chkDeclared($1)==1) {
+		if(checkDeclared($1)==1) {
       		printf("\nDuplicate Declaration!\n");
         }
    		else {
-      	    init_asn($1);
+      	    varAssign($1);
 		}
     }
 	;
@@ -206,7 +206,7 @@ cstatement:
 	| declare
 	| expression END
     | VARIABLE '=' expression END {
-		if(chkDeclared($1) == 0) {
+		if(checkDeclared($1) == 0) {
 			printf("\n%s Not Declared!\n", $1);
 		}
 		else {
@@ -215,13 +215,13 @@ cstatement:
 	}
     | function_call END
     | DISPLAY '(' VARIABLE ')' END {
-		if(chkDeclared($3)==0) {
+		if(checkDeclared($3)==0) {
 			printf("\nCan't print, Variable is not declared\n");
         }
         else {
             int index = getValue($3);
             if(type[index] == 0){
-                printf("\nPrinting Value of the variable %s: %d\n", $3, store[index]);
+                printf("\nPrinting Value of the variable %s: %d\n", $3, store_int[index]);
             }
             else if(type[index] == 1){
                 printf("\nPrinting Value of the variable %s: %f\n", $3, store_float[index]);
@@ -288,7 +288,7 @@ switch_statement: /* NULL */
 
 while_loop:
     VARIABLE loop_exp loop_assign {
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
             printf("\n%s Not Declared!\n", $1);
         }
         else {
@@ -308,7 +308,7 @@ for_start:
 
 for_loop:
     | VARIABLE '=' loop_assign ',' VARIABLE loop_exp loop_assign ',' VARIABLE f_state loop_assign {			
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
             printf("\n%s Not Declared!\n", $1);
         }
         if(strcmp($1, $5) == 0) {
@@ -324,7 +324,7 @@ for_loop:
 loop_assign:
     NUMBER
     | VARIABLE {
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
             printf("\n%s Not Declared!\n", $1);
         }
         else {
@@ -355,20 +355,20 @@ if_condition:
     IF '(' expression ')' {
         int x = atoi($3);
         if( x >= 1 ) {
-			ifdone[ifptr] = 1;
+			store_if[if_pointer] = 1;
 			printf("\nIf Block is Executed!\n");
 		}
         else {
             printf("\nIf Block is Not Executed!\n");
         }
-        ifptr++;
+        if_pointer++;
     }
 
 else_if_condition:
     ELSE_IF '(' expression ')' {
         int x = atoi($3);
-        if( x >= 1 && ifdone[ifptr] == 0) {
-			ifdone[ifptr] = 1;
+        if( x >= 1 && store_if[if_pointer] == 0) {
+			store_if[if_pointer] = 1;
 			printf("\nElse If Block is Executed!\n");
 		}
         else {
@@ -378,8 +378,8 @@ else_if_condition:
 
 else_condition:
     ELSE {
-        if( ifdone[ifptr] == 0) {
-			ifdone[ifptr] = 1;
+        if( store_if[if_pointer] == 0) {
+			store_if[if_pointer] = 1;
 			printf("\nElse Block is Executed!\n");
 		}
         else {
@@ -395,7 +395,7 @@ function_call:
 
 f_var: 
     VARIABLE {
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
 			printf("\n%s Function is Not Declared!\n", $1);
 		}
         else {
@@ -405,7 +405,7 @@ f_var:
 
 call_param:
     call_param ',' VARIABLE {
-        if(chkDeclared($3) == 0) {
+        if(checkDeclared($3) == 0) {
             printf("\n%s Variable is Not Declared\n", $3);
         }
         else {
@@ -414,7 +414,7 @@ call_param:
         }
     }
     | VARIABLE {
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
             printf("\n%s Variable is Not Declared\n", $1);
         }
         else {
@@ -430,41 +430,41 @@ declare:
 	;
 
 type:
-    INT { ttp = 0; }
-	| FLOAT  { ttp = 1; }
-	| STRING  { ttp = 2; }
+    INT { var_type_pointer = 0; }
+	| FLOAT  { var_type_pointer = 1; }
+	| STRING  { var_type_pointer = 2; }
 	;
 
 id:
     id ',' VARIABLE {
-        if(chkDeclared($3)==1) {
+        if(checkDeclared($3)==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn($3);
+            varAssign($3);
         }
     }
     | id ',' VARIABLE '=' expression {
-        if(chkDeclared($3)==1) {
+        if(checkDeclared($3)==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn($3);
+            varAssign($3);
             setValue($3, $5); 
         }
     }
 	| VARIABLE {
-        if(chkDeclared($1)==1)
+        if(checkDeclared($1)==1)
             printf("\nDuplicate Declaration!\n");
         else
-            init_asn($1);
+            varAssign($1);
 	}
     | VARIABLE '=' expression {
-        if(chkDeclared($1)==1) {
+        if(checkDeclared($1)==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn($1);
+            varAssign($1);
             setValue($1, $3);
         }
     }
@@ -481,14 +481,14 @@ expression:
     }
 	| VARIABLE {
         $$ = malloc(20);
-        if(chkDeclared($1) == 0) {
+        if(checkDeclared($1) == 0) {
             sprintf($$, "%d", 0);
             printf("\n%s Not Declared!\n", $1);
         }
         else {
             int index = getValue($1);
             if(type[index] == 0){
-                sprintf($$, "%d", store[index]);
+                sprintf($$, "%d", store_int[index]);
             }
             else if(type[index] == 1){
                 sprintf($$, "%f", store_float[index]);
@@ -609,16 +609,16 @@ expression:
 	}
     | VARIABLE INC {
         $$ = malloc(20);
-        if( chkDeclared($1) == 0) {
+        if( checkDeclared($1) == 0) {
             sprintf($$, "%d", 0);
             printf("\n%s is Not Declared!\n", $1);
         }
         else {
             int index = getValue($1);
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = tmp+1;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf($$, "%d", tmp);
                 printf("\nValue After Increment: %d\n", tmp);
             }
@@ -636,16 +636,16 @@ expression:
     }
 	| VARIABLE DEC {
         $$ = malloc(20);
-  		if( chkDeclared($1) == 0) {
+  		if( checkDeclared($1) == 0) {
             sprintf($$, "%d", 0);
      		printf("\n%s Not Declared!\n", $1);
    		}
     	else {
             int index = getValue($1);
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = tmp-1;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf($$, "%d", tmp);
                 printf("\nValue After Decrement: %d\n", tmp);
             }
@@ -663,16 +663,16 @@ expression:
 	}
     | NOT VARIABLE {
         $$ = malloc(20);
-  		if( chkDeclared($2) == 0) {
+  		if( checkDeclared($2) == 0) {
             sprintf($$, "%d", 0);
             printf("\n%s Not Declared!\n", $2);
    		}
         else {
             int index = getValue($2);
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = !tmp;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf($$, "%d", tmp);
                 printf("\nValue After NOT Operation: %d\n", tmp);
             }

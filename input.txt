@@ -64,4 +64,8 @@ int main() {
 			print(b);
 		}
 	}
+	//single line comment
+	/*Multi
+	Line
+	Comment*/
 }

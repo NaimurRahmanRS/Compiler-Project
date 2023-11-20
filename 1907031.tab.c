@@ -81,15 +81,15 @@ int yyerror(char *s);
 
 // Symbol Table Arrays
 char var_name[1000][100];
-int store[1000];
+int store_int[1000];
 float store_float[1000];
 char store_String[1000][100];
 int type[1000];
-int ttp = 0; // 0 = int, 1 = float, 2 = string, 3 = function
+int var_type_pointer = 0; // 0 = int, 1 = float, 2 = string, 3 = function
 
 // Conditional Statement Variables
-int ifptr = 0;
-int ifdone[1000];
+int if_pointer = 0;
+int store_if[1000];
 
 // Switch Handling Variables
 int switch_var = 0; 
@@ -99,7 +99,7 @@ int switch_case = 0;
 int var_cnt = 0;
 
 // Variable Declaration Check
-int chkDeclared(char *s){
+int checkDeclared(char *s){
     int i;
     for(i=0; i<var_cnt; i++){
         if(strcmp(var_name[i], s) == 0)
@@ -109,23 +109,23 @@ int chkDeclared(char *s){
 }
 
 // New Variable Declaration
-int init_asn(char *s){
-    if(chkDeclared(s) == 1){
+int varAssign(char *s){
+    if(checkDeclared(s) == 1){
         return 0;
     }
     strcpy(var_name[var_cnt], s);
-    store[var_cnt] = 0;
+    store_int[var_cnt] = 0;
     store_float[var_cnt] = 0.0;
     strcpy(store_String[var_cnt], "");
-    type[var_cnt] = ttp;
+    type[var_cnt] = var_type_pointer;
     char name[10];
-    if(ttp == 0) {
+    if(var_type_pointer == 0) {
         strcpy(name, "Int");
     }
-    else if(ttp == 1) {
+    else if(var_type_pointer == 1) {
         strcpy(name, "Float");
     }
-    else if(ttp == 2) {
+    else if(var_type_pointer == 2) {
         strcpy(name, "String");
     }
     printf("\nNew Variable Declared With Name: %s and Type: %s\n", var_name[var_cnt], name);
@@ -134,12 +134,12 @@ int init_asn(char *s){
 }
 
 // New Function Declaration
-int init_asn_func(char *s){
-    if(chkDeclared(s) == 1){
+int functionAssign(char *s){
+    if(checkDeclared(s) == 1){
         return 0;
     }
     strcpy(var_name[var_cnt], s);
-    store[var_cnt] = 0;
+    store_int[var_cnt] = 0;
     store_float[var_cnt] = 0.0;
     strcpy(store_String[var_cnt], "");
     type[var_cnt] = 3;
@@ -150,7 +150,7 @@ int init_asn_func(char *s){
 
 // Assigning Value to Variable
 int setValue(char *s, char* val){
-    if(chkDeclared(s) == 0){
+    if(checkDeclared(s) == 0){
         return 0;
     }
     int ok=0, i;
@@ -161,8 +161,8 @@ int setValue(char *s, char* val){
         }
     }
     if(type[ok] == 0){
-        store[ok] = atoi(val);
-        printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store[ok]);
+        store_int[ok] = atoi(val);
+        printf("\nNew Value Assigned to Variable Name: %s and Value: %d\n", var_name[ok], store_int[ok]);
     }
     else if(type[ok] == 1){
         store_float[ok] = atof(val);
@@ -1829,11 +1829,11 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 174 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(2) - (2)].string))==1) {
+        if(checkDeclared((yyvsp[(2) - (2)].string))==1) {
             printf("\nDuplicate Function Name!\n");
         }
         else {
-            init_asn_func((yyvsp[(2) - (2)].string));
+            functionAssign((yyvsp[(2) - (2)].string));
         }
     ;}
     break;
@@ -1857,11 +1857,11 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 189 "1907031.y"
     {
-		if(chkDeclared((yyvsp[(1) - (1)].string))==1) {
+		if(checkDeclared((yyvsp[(1) - (1)].string))==1) {
       		printf("\nDuplicate Declaration!\n");
         }
    		else {
-      	    init_asn((yyvsp[(1) - (1)].string));
+      	    varAssign((yyvsp[(1) - (1)].string));
 		}
     ;}
     break;
@@ -1871,7 +1871,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 208 "1907031.y"
     {
-		if(chkDeclared((yyvsp[(1) - (4)].string)) == 0) {
+		if(checkDeclared((yyvsp[(1) - (4)].string)) == 0) {
 			printf("\n%s Not Declared!\n", (yyvsp[(1) - (4)].string));
 		}
 		else {
@@ -1885,13 +1885,13 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 217 "1907031.y"
     {
-		if(chkDeclared((yyvsp[(3) - (5)].string))==0) {
+		if(checkDeclared((yyvsp[(3) - (5)].string))==0) {
 			printf("\nCan't print, Variable is not declared\n");
         }
         else {
             int index = getValue((yyvsp[(3) - (5)].string));
             if(type[index] == 0){
-                printf("\nPrinting Value of the variable %s: %d\n", (yyvsp[(3) - (5)].string), store[index]);
+                printf("\nPrinting Value of the variable %s: %d\n", (yyvsp[(3) - (5)].string), store_int[index]);
             }
             else if(type[index] == 1){
                 printf("\nPrinting Value of the variable %s: %f\n", (yyvsp[(3) - (5)].string), store_float[index]);
@@ -2012,7 +2012,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 290 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (3)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (3)].string)) == 0) {
             printf("\n%s Not Declared!\n", (yyvsp[(1) - (3)].string));
         }
         else {
@@ -2044,7 +2044,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 310 "1907031.y"
     {			
-        if(chkDeclared((yyvsp[(1) - (11)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (11)].string)) == 0) {
             printf("\n%s Not Declared!\n", (yyvsp[(1) - (11)].string));
         }
         if(strcmp((yyvsp[(1) - (11)].string), (yyvsp[(5) - (11)].string)) == 0) {
@@ -2063,7 +2063,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 326 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (1)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (1)].string)) == 0) {
             printf("\n%s Not Declared!\n", (yyvsp[(1) - (1)].string));
         }
         else {
@@ -2097,13 +2097,13 @@ yyreduce:
     {
         int x = atoi((yyvsp[(3) - (4)].string));
         if( x >= 1 ) {
-			ifdone[ifptr] = 1;
+			store_if[if_pointer] = 1;
 			printf("\nIf Block is Executed!\n");
 		}
         else {
             printf("\nIf Block is Not Executed!\n");
         }
-        ifptr++;
+        if_pointer++;
     ;}
     break;
 
@@ -2113,8 +2113,8 @@ yyreduce:
 #line 368 "1907031.y"
     {
         int x = atoi((yyvsp[(3) - (4)].string));
-        if( x >= 1 && ifdone[ifptr] == 0) {
-			ifdone[ifptr] = 1;
+        if( x >= 1 && store_if[if_pointer] == 0) {
+			store_if[if_pointer] = 1;
 			printf("\nElse If Block is Executed!\n");
 		}
         else {
@@ -2128,8 +2128,8 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 380 "1907031.y"
     {
-        if( ifdone[ifptr] == 0) {
-			ifdone[ifptr] = 1;
+        if( store_if[if_pointer] == 0) {
+			store_if[if_pointer] = 1;
 			printf("\nElse Block is Executed!\n");
 		}
         else {
@@ -2152,7 +2152,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 397 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (1)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (1)].string)) == 0) {
 			printf("\n%s Function is Not Declared!\n", (yyvsp[(1) - (1)].string));
 		}
         else {
@@ -2166,7 +2166,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 407 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(3) - (3)].string)) == 0) {
+        if(checkDeclared((yyvsp[(3) - (3)].string)) == 0) {
             printf("\n%s Variable is Not Declared\n", (yyvsp[(3) - (3)].string));
         }
         else {
@@ -2181,7 +2181,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 416 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (1)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (1)].string)) == 0) {
             printf("\n%s Variable is Not Declared\n", (yyvsp[(1) - (1)].string));
         }
         else {
@@ -2202,21 +2202,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 433 "1907031.y"
-    { ttp = 0; ;}
+    { var_type_pointer = 0; ;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
 #line 434 "1907031.y"
-    { ttp = 1; ;}
+    { var_type_pointer = 1; ;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
 #line 435 "1907031.y"
-    { ttp = 2; ;}
+    { var_type_pointer = 2; ;}
     break;
 
   case 59:
@@ -2224,11 +2224,11 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 439 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(3) - (3)].string))==1) {
+        if(checkDeclared((yyvsp[(3) - (3)].string))==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn((yyvsp[(3) - (3)].string));
+            varAssign((yyvsp[(3) - (3)].string));
         }
     ;}
     break;
@@ -2238,11 +2238,11 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 447 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(3) - (5)].string))==1) {
+        if(checkDeclared((yyvsp[(3) - (5)].string))==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn((yyvsp[(3) - (5)].string));
+            varAssign((yyvsp[(3) - (5)].string));
             setValue((yyvsp[(3) - (5)].string), (yyvsp[(5) - (5)].string)); 
         }
     ;}
@@ -2253,10 +2253,10 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 456 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (1)].string))==1)
+        if(checkDeclared((yyvsp[(1) - (1)].string))==1)
             printf("\nDuplicate Declaration!\n");
         else
-            init_asn((yyvsp[(1) - (1)].string));
+            varAssign((yyvsp[(1) - (1)].string));
 	;}
     break;
 
@@ -2265,11 +2265,11 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 462 "1907031.y"
     {
-        if(chkDeclared((yyvsp[(1) - (3)].string))==1) {
+        if(checkDeclared((yyvsp[(1) - (3)].string))==1) {
             printf("\nDuplicate Declaration!\n");
         }
         else {
-            init_asn((yyvsp[(1) - (3)].string));
+            varAssign((yyvsp[(1) - (3)].string));
             setValue((yyvsp[(1) - (3)].string), (yyvsp[(3) - (3)].string));
         }
     ;}
@@ -2301,14 +2301,14 @@ yyreduce:
 #line 482 "1907031.y"
     {
         (yyval.string) = malloc(20);
-        if(chkDeclared((yyvsp[(1) - (1)].string)) == 0) {
+        if(checkDeclared((yyvsp[(1) - (1)].string)) == 0) {
             sprintf((yyval.string), "%d", 0);
             printf("\n%s Not Declared!\n", (yyvsp[(1) - (1)].string));
         }
         else {
             int index = getValue((yyvsp[(1) - (1)].string));
             if(type[index] == 0){
-                sprintf((yyval.string), "%d", store[index]);
+                sprintf((yyval.string), "%d", store_int[index]);
             }
             else if(type[index] == 1){
                 sprintf((yyval.string), "%f", store_float[index]);
@@ -2513,16 +2513,16 @@ yyreduce:
 #line 610 "1907031.y"
     {
         (yyval.string) = malloc(20);
-        if( chkDeclared((yyvsp[(1) - (2)].string)) == 0) {
+        if( checkDeclared((yyvsp[(1) - (2)].string)) == 0) {
             sprintf((yyval.string), "%d", 0);
             printf("\n%s is Not Declared!\n", (yyvsp[(1) - (2)].string));
         }
         else {
             int index = getValue((yyvsp[(1) - (2)].string));
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = tmp+1;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf((yyval.string), "%d", tmp);
                 printf("\nValue After Increment: %d\n", tmp);
             }
@@ -2546,16 +2546,16 @@ yyreduce:
 #line 637 "1907031.y"
     {
         (yyval.string) = malloc(20);
-  		if( chkDeclared((yyvsp[(1) - (2)].string)) == 0) {
+  		if( checkDeclared((yyvsp[(1) - (2)].string)) == 0) {
             sprintf((yyval.string), "%d", 0);
      		printf("\n%s Not Declared!\n", (yyvsp[(1) - (2)].string));
    		}
     	else {
             int index = getValue((yyvsp[(1) - (2)].string));
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = tmp-1;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf((yyval.string), "%d", tmp);
                 printf("\nValue After Decrement: %d\n", tmp);
             }
@@ -2579,16 +2579,16 @@ yyreduce:
 #line 664 "1907031.y"
     {
         (yyval.string) = malloc(20);
-  		if( chkDeclared((yyvsp[(2) - (2)].string)) == 0) {
+  		if( checkDeclared((yyvsp[(2) - (2)].string)) == 0) {
             sprintf((yyval.string), "%d", 0);
             printf("\n%s Not Declared!\n", (yyvsp[(2) - (2)].string));
    		}
         else {
             int index = getValue((yyvsp[(2) - (2)].string));
             if(type[index] == 0){
-                int tmp = store[index];
+                int tmp = store_int[index];
                 tmp = !tmp;
-                store[index] = tmp;
+                store_int[index] = tmp;
                 sprintf((yyval.string), "%d", tmp);
                 printf("\nValue After NOT Operation: %d\n", tmp);
             }
@@ -2991,7 +2991,7 @@ int yywrap()
 int main()
 {	
 	yyin = freopen("input.txt","r",stdin);
-	//yyout = freopen("output.txt","w",stdout);
+	yyout = freopen("output.txt","w",stdout);
     yyparse();
 	return 0;	
 }
